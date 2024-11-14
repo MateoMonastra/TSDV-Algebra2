@@ -7,57 +7,49 @@ namespace TP3
 {
     public static class Sorter<T> where T : IComparable<T>
     {
-        private static int _iterationCount = 0;
-        private static int _comparissonCount = 0;
-
         #region SortingMethods
 
-        // Algoritmo Bitonic Sort:
-        public static void BitonicSort(List<T> list)
+        // Algoritmo Bitonic Sort
+        public static void BitonicSort<T>(List<T> list) where T : IComparable<T>
         {
             Debug.Log("BitonicSort - Lista inicial: " + string.Join(", ", list));
-            BitonicSortRecursive(list, true);
+            BitonicSortRecursive(list, 0, list.Count, true);
             Debug.Log("BitonicSort - Lista ordenada: " + string.Join(", ", list));
         }
 
-        // Método auxiliar recursivo para BitonicSort sin rango específico.
-        private static void BitonicSortRecursive(List<T> list, bool ascending)
+
+        private static void BitonicSortRecursive<T>(List<T> list, int from, int count, bool ascending)
+            where T : IComparable<T>
         {
-            if (list.Count <= 1) return;
+            if (count <= 1) return;
 
-            int k = list.Count / 2;
-            List<T> leftList = list.GetRange(0, k);
-            List<T> rightList = list.GetRange(k, list.Count - k);
+            int halfCount = count / 2;
 
-            BitonicSortRecursive(leftList, true);
-            BitonicSortRecursive(rightList, false);
-            BitonicMerge(list, ascending);
+            
+            BitonicSortRecursive(list, from, halfCount, true);
+            
+            BitonicSortRecursive(list, from + halfCount, halfCount, false);
+            
+            BitonicMerge(list, from, count, ascending);
         }
-
-        // Fusión bitónica de dos subsecuencias sin rango específico.
-        private static void BitonicMerge(List<T> list, bool ascending)
+        
+        private static void BitonicMerge<T>(List<T> list, int from, int count, bool ascending) where T : IComparable<T>
         {
-            if (list.Count <= 1) return;
+            if (count <= 1) return;
 
-            int k = list.Count / 2;
-            for (int i = 0; i < k; i++)
+            int halfCount = count / 2;
+            
+            for (int i = from; i < from + halfCount; i++)
             {
-                if ((ascending && Compare(list[i], list[i + k]) > 0) ||
-                    (!ascending && Compare(list[i], list[i + k]) < 0))
+                if ((ascending && list[i].CompareTo(list[i + halfCount]) > 0) ||
+                    (!ascending && list[i].CompareTo(list[i + halfCount]) < 0))
                 {
-                    Swap(list, i, i + k);
+                    Swap(list, i, i + halfCount);
                 }
             }
-
-            List<T> leftList = list.GetRange(0, k);
-            List<T> rightList = list.GetRange(k, list.Count - k);
-
-            BitonicMerge(leftList, ascending);
-            BitonicMerge(rightList, ascending);
-
-            list.Clear();
-            list.AddRange(leftList);
-            list.AddRange(rightList);
+            
+            BitonicMerge(list, from, halfCount, ascending);
+            BitonicMerge(list, from + halfCount, halfCount, ascending);
         }
 
 
@@ -453,9 +445,10 @@ namespace TP3
             }
         }
 
-        private static void Swap(List<T> list, int firstIndex, int secondIndex)
+        // Método para intercambiar dos elementos en la lista
+        private static void Swap<T>(List<T> list, int i, int j)
         {
-            (list[firstIndex], list[secondIndex]) = (list[secondIndex], list[firstIndex]);
+            (list[i], list[j]) = (list[j], list[i]);
         }
 
         private static int Compare(T a, T b)
