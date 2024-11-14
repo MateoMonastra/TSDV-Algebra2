@@ -141,10 +141,21 @@ namespace TP3
 
         private void TestLast()
         {
+            Debug.Log($"Last equal value: {GraphMethods.Last(source1, i => i == numTest)}");
         }
 
         private void TestIntersect()
         {
+            var intersectList = GraphMethods.ToList(GraphMethods.Intersect(source1, source2));
+            
+            string logText = "Intersects: ";
+            
+            foreach (var element in intersectList)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
 
         private void TestCount()

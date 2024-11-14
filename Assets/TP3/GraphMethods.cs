@@ -203,7 +203,7 @@ public class GraphMethods
                 return element;
             }
         }
-        
+
         return default(TSource);
     }
 
@@ -216,7 +216,25 @@ public class GraphMethods
     /// <returns></returns>
     public static TSource Last<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        var index = 0;
+        var lastFoundIndex = 0;
+
+        foreach (var element in source)
+        {
+            if (predicate.Invoke(element))
+            {
+                lastFoundIndex = index;
+            }
+
+            index++;
+        }
+
+        if (lastFoundIndex != -1)
+        {
+            return ElementAt(source, lastFoundIndex);
+        }
+
+        return default(TSource);
     }
 
     /// <summary>
@@ -228,7 +246,7 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> Intersect<TSource>(IEnumerable<TSource> source1, IEnumerable<TSource> source2)
     {
-        throw new NotImplementedException();
+        return Intersect(source1, source2, EqualityComparer<TSource>.Default);
     }
 
     /// <summary>
@@ -242,7 +260,17 @@ public class GraphMethods
     public static IEnumerable<TSource> Intersect<TSource>(IEnumerable<TSource> source1, IEnumerable<TSource> source2,
         IEqualityComparer<TSource> comparer)
     {
-        throw new NotImplementedException();
+        var result = new List<TSource>();
+
+        foreach (var element in source1)
+        {
+            if (Contains(source2, element))
+            {
+                result.Add(element);
+            }
+        }
+
+        return result;
     }
 
     /// <summary>
