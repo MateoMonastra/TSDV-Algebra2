@@ -12,7 +12,14 @@ public class GraphMethods
     /// <returns></returns>
     public static bool All<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        foreach (var variable in source)
+        {
+            if (!predicate.Invoke(variable))
+            {
+                return false;
+            }
+        }
+        return true;
     }
     /// <summary>
     /// Determines whether any element of a sequence satisfies a condition.
@@ -23,7 +30,14 @@ public class GraphMethods
     /// <returns></returns>
     public static bool Any<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate) 
     {
-        throw new NotImplementedException();
+        foreach (var variable in source)
+        {
+            if (predicate.Invoke(variable))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     /// <summary>
     /// Determines whether a sequence contains a specified element by using the default equality comparer.
