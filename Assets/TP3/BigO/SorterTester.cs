@@ -149,12 +149,12 @@ namespace TP3
 
         private void TestHeap()
         {
-            Sorter<int>.HeapSort(list);
+            Sorter<int>.HeapSort(list, 0, list.Count);
         }
 
         private void TestInsertion()
         {
-            Sorter<int>.InsertionSort(list);
+            Sorter<int>.InsertionSort(list,0, list.Count);
         }
     }
 }

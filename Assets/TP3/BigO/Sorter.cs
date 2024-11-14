@@ -154,23 +154,23 @@ namespace TP3
             Debug.Log("ShellSort - Lista inicial: " + string.Join(", ", list));
 
             int n = list.Count;
-            // Comienza con un intervalo grande y lo reduce progresivamente.
+            
             for (int gap = n / 2; gap > 0; gap /= 2)
             {
-                // Aplica Insertion Sort en las sublistas definidas por el intervalo actual.
+                
                 for (int i = gap; i < n; i++)
                 {
                     T temp = list[i];
                     int j = i;
 
-                    // Desplaza los elementos mayores al valor temporal hacia adelante.
+                    
                     while (j >= gap && Compare(list[j - gap], temp) > 0)
                     {
                         list[j] = list[j - gap];
                         j -= gap;
                     }
 
-                    list[j] = temp; // Coloca el elemento temporal en su posición final.
+                    list[j] = temp; 
                 }
             }
 
@@ -183,10 +183,10 @@ namespace TP3
         {
             Debug.Log("BogoSort - Lista inicial: " + string.Join(", ", list));
 
-            // Repite hasta que la lista esté ordenada.
+            
             while (!IsSorted(list))
             {
-                Shuffle(list); // Mezcla aleatoriamente la lista.
+                Shuffle(list);
             }
 
             Debug.Log("BogoSort - Lista ordenada: " + string.Join(", ", list));
@@ -200,42 +200,36 @@ namespace TP3
         // Algoritmo Intro Sort:
         // Comienza usando QuickSort y cambia a HeapSort si la profundidad de recursión excede el límite permitido,
         // evitando el mal rendimiento de QuickSort en sus peores casos. Usa Insertion Sort para listas pequeñas.
-        public static void IntroSort(List<T> list)
+        public static void IntroSort<T>(List<T> list) where T : IComparable<T>
         {
             Debug.Log("IntroSort - Lista inicial: " + string.Join(", ", list));
 
-            int depthLimit = 2 * (int)Mathf.Log(list.Count); // Define el límite de recursión.
-            IntroSortRecursive(list, 0, list.Count, depthLimit);
+            int depthLimit = 2 * (int)Mathf.Log(list.Count);
+            IntroSortRecursive(list, 0, list.Count - 1, depthLimit);
 
             Debug.Log("IntroSort - Lista ordenada: " + string.Join(", ", list));
         }
         
-        private static void IntroSortRecursive(List<T> list, int left, int right, int depthLimit)
+        private static void IntroSortRecursive<T>(List<T> list, int left, int right, int depthLimit) where T : IComparable<T>
         {
-            if (list.Count < 16)
+            int size = right - left + 1;
+            
+            if (size < 16)
             {
-                InsertionSort(list); 
+                InsertionSort(list, left, right);
                 return;
             }
-
+            
             if (depthLimit == 0)
             {
-                HeapSort(list); 
+                HeapSort(list, left, right);
                 return;
             }
-
+            
             int pivot = Partition(list, left, right);
-            List<T> leftList = list.GetRange(0, pivot);
-            List<T> rightList = list.GetRange(pivot + 1, list.Count - pivot - 1);
-
-            IntroSortRecursive(leftList, left, right, depthLimit - 1);
-            IntroSortRecursive(rightList, left, right, depthLimit - 1);
-            list.Clear();
-            list.AddRange(leftList);
-            list.Add(list[pivot]);
-            list.AddRange(rightList);
+            IntroSortRecursive(list, left, pivot - 1, depthLimit - 1);
+            IntroSortRecursive(list, pivot + 1, right, depthLimit - 1);
         }
-
         private static void AdaptiveSort(List<T> list)
         {
             Debug.Log("Implementation needed");
@@ -295,67 +289,7 @@ namespace TP3
             list.AddRange(sortedList);
             Debug.Log("MergeSort - Lista ordenada: " + string.Join(", ", list));
         }
-
-
-        // Algoritmo Heap Sort:
-        public static void HeapSort(List<T> list)
-        {
-            Debug.Log("HeapSort - Lista inicial: " + string.Join(", ", list));
-
-            for (int i = list.Count / 2 - 1; i >= 0; i--)
-            {
-                Heapify(list, list.Count, i);
-            }
-
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                Swap(list, 0, i);
-                Heapify(list, i, 0);
-            }
-
-            Debug.Log("HeapSort - Lista ordenada: " + string.Join(", ", list));
-        }
-
-        // Método auxiliar Heapify para HeapSort.
-        private static void Heapify(List<T> list, int n, int i)
-        {
-            int largest = i;
-            int left = 2 * i + 1;
-            int right = 2 * i + 2;
-
-            if (left < n && Compare(list[left], list[largest]) > 0)
-                largest = left;
-
-            if (right < n && Compare(list[right], list[largest]) > 0)
-                largest = right;
-
-            if (largest != i)
-            {
-                Swap(list, i, largest);
-                Heapify(list, n, largest);
-            }
-        }
-
-        // Divide la lista y coloca el pivote en su posición correcta, separando los elementos
-        // menores y mayores alrededor de él.
-        private static int Partition<T>(List<T> list, int left, int right) where T : IComparable<T>
-        {
-            T pivotValue = list[right];
-            int i = left - 1;
-
-            for (int j = left; j < right; j++)
-            {
-                if (list[j].CompareTo(pivotValue) < 0)
-                {
-                    i++;
-                    Swap(list, i, j);
-                }
-            }
-
-            Swap(list, i + 1, right);
-            return i + 1;
-        }
-
+        
         private static List<T> MergeSortRecursive(List<T> list)
         {
             if (list.Count <= 1)
@@ -387,26 +321,58 @@ namespace TP3
             return result;
         }
 
+
+        // Algoritmo Heap Sort:
+        public static void HeapSort<T>(List<T> list, int left, int right) where T : IComparable<T>
+        {
+            int size = right - left + 1;
+
+            
+            for (int i = left + size / 2 - 1; i >= left; i--)
+                Heapify(list, size, i, left);
+
+            
+            for (int i = right; i > left; i--)
+            {
+                Swap(list, left, i); 
+                Heapify(list, i - left, left, left);
+            }
+        }
+        
+        private static void Heapify<T>(List<T> list, int size, int root, int offset) where T : IComparable<T>
+        {
+            int largest = root;
+            int leftChild = 2 * (root - offset) + 1 + offset;
+            int rightChild = 2 * (root - offset) + 2 + offset;
+
+            if (leftChild < offset + size && list[leftChild].CompareTo(list[largest]) > 0)
+                largest = leftChild;
+
+            if (rightChild < offset + size && list[rightChild].CompareTo(list[largest]) > 0)
+                largest = rightChild;
+
+            if (largest != root)
+            {
+                Swap(list, root, largest);
+                Heapify(list, size, largest, offset);
+            }
+        }
+        
         // Algoritmo Insertion Sort:
         // Toma cada elemento de la lista y lo inserta en su posición correcta en una sublista ordenada al inicio.
-        public static void InsertionSort(List<T> list)
+        public static void InsertionSort<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
-            Debug.Log("InsertionSort - Lista inicial: " + string.Join(", ", list));
-
-            for (int i = 1; i < list.Count; i++)
+            for (int i = left + 1; i <= right; i++)
             {
                 T key = list[i];
                 int j = i - 1;
-                while (j >= 0 && Compare(list[j], key) > 0)
+                while (j >= left && list[j].CompareTo(key) > 0)
                 {
                     list[j + 1] = list[j];
                     j--;
                 }
-
                 list[j + 1] = key;
             }
-
-            Debug.Log("InsertionSort - Lista ordenada: " + string.Join(", ", list));
         }
 
         #endregion
@@ -446,6 +412,27 @@ namespace TP3
         {
             return a.CompareTo(b);
         }
+        
+        // Divide la lista y coloca el pivote en su posición correcta, separando los elementos
+        // menores y mayores alrededor de él.
+        private static int Partition<T>(List<T> list, int left, int right) where T : IComparable<T>
+        {
+            T pivotValue = list[right];
+            int i = left - 1;
+
+            for (int j = left; j < right; j++)
+            {
+                if (list[j].CompareTo(pivotValue) < 0)
+                {
+                    i++;
+                    Swap(list, i, j);
+                }
+            }
+
+            Swap(list, i + 1, right);
+            return i + 1;
+        }
+
 
         #endregion
     }
