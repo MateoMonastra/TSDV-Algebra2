@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace BigO
+namespace TP3
 {
     public static class Sorter<T> where T : IComparable<T>
     {
@@ -157,6 +157,10 @@ namespace BigO
             list.AddRange(rightList);
         }
 
+        private static void RadixLSDSort(List<T> list)
+        {
+            Debug.Log("Implementation needed");
+        }
 
         // Algoritmo Shell Sort:
         // Ordena la lista utilizando intervalos decrecientes (gap) para reducir el número de comparaciones.
@@ -190,6 +194,26 @@ namespace BigO
             Debug.Log("ShellSort - Lista ordenada: " + string.Join(", ", list));
         }
 
+        // Algoritmo Bogo Sort:
+        // Ordena la lista aleatoriamente hasta que esté en el orden correcto.
+        public static void BogoSort(List<T> list)
+        {
+            Debug.Log("BogoSort - Lista inicial: " + string.Join(", ", list));
+
+            // Repite hasta que la lista esté ordenada.
+            while (!IsSorted(list))
+            {
+                Shuffle(list); // Mezcla aleatoriamente la lista.
+            }
+
+            Debug.Log("BogoSort - Lista ordenada: " + string.Join(", ", list));
+        }
+
+        private static void RadixMSDSort(List<T> list)
+        {
+            Debug.Log("Implementation needed");
+        }
+
         // Algoritmo Intro Sort:
         // Comienza usando QuickSort y cambia a HeapSort si la profundidad de recursión excede el límite permitido,
         // evitando el mal rendimiento de QuickSort en sus peores casos. Usa Insertion Sort para listas pequeñas.
@@ -203,7 +227,7 @@ namespace BigO
             Debug.Log("IntroSort - Lista ordenada: " + string.Join(", ", list));
         }
 
-// Método auxiliar recursivo para IntroSort sin parámetros de rango.
+        // Método auxiliar recursivo para IntroSort sin parámetros de rango.
         private static void IntroSortRecursive(List<T> list, int depthLimit)
         {
             if (list.Count < 16)
@@ -230,6 +254,10 @@ namespace BigO
             list.AddRange(rightList);
         }
 
+        private static void AdaptiveSort(List<T> list)
+        {
+            Debug.Log("Implementation needed");
+        }
 
         // Algoritmo Bubble Sort:
         // Recorre la lista repetidamente, moviendo los elementos más grandes al final de la lista.
@@ -249,6 +277,41 @@ namespace BigO
             }
 
             Debug.Log("BubbleSort - Lista ordenada: " + string.Join(", ", list));
+        }
+
+        // Algoritmo Gnome Sort:
+        // Similar a la ordenación por inserción, pero realiza intercambios de elementos y retrocede
+        // si encuentra un desorden.
+        public static void GnomeSort(List<T> list)
+        {
+            Debug.Log("GnomeSort - Lista inicial: " + string.Join(", ", list));
+
+            int index = 0;
+            while (index < list.Count)
+            {
+                if (index == 0 || Compare(list[index], list[index - 1]) >= 0)
+                {
+                    index++;
+                }
+                else
+                {
+                    Swap(list, index, index - 1);
+                    index--;
+                }
+            }
+
+            Debug.Log("GnomeSort - Lista ordenada: " + string.Join(", ", list));
+        }
+
+        // Algoritmo Merge Sort:
+        // Divide la lista en mitades y ordena recursivamente cada mitad. Luego, fusiona las dos mitades ordenadas.
+        public static void MergeSort(List<T> list)
+        {
+            Debug.Log("MergeSort - Lista inicial: " + string.Join(", ", list));
+            var sortedList = MergeSortRecursive(list);
+            list.Clear();
+            list.AddRange(sortedList);
+            Debug.Log("MergeSort - Lista ordenada: " + string.Join(", ", list));
         }
 
 
@@ -271,21 +334,6 @@ namespace BigO
             Debug.Log("HeapSort - Lista ordenada: " + string.Join(", ", list));
         }
 
-        // Algoritmo Bogo Sort:
-        // Ordena la lista aleatoriamente hasta que esté en el orden correcto.
-        public static void BogoSort(List<T> list)
-        {
-            Debug.Log("BogoSort - Lista inicial: " + string.Join(", ", list));
-
-            // Repite hasta que la lista esté ordenada.
-            while (!IsSorted(list))
-            {
-                Shuffle(list); // Mezcla aleatoriamente la lista.
-            }
-
-            Debug.Log("BogoSort - Lista ordenada: " + string.Join(", ", list));
-        }
-
         // Método auxiliar Heapify para HeapSort.
         private static void Heapify(List<T> list, int n, int i)
         {
@@ -306,32 +354,8 @@ namespace BigO
             }
         }
 
-        // Algoritmo Gnome Sort:
-        // Similar a la ordenación por inserción, pero realiza intercambios de elementos y retrocede
-        // si encuentra un desorden.
-        public static void GnomeSort(List<T> list)
-        {
-            Debug.Log("GnomeSort - Lista inicial: " + string.Join(", ", list));
-            
-            int index = 0;
-            while (index < list.Count)
-            {
-                if (index == 0 || Compare(list[index], list[index - 1]) >= 0)
-                {
-                    index++;
-                }
-                else
-                {
-                    Swap(list, index, index - 1);
-                    index--;
-                }
-            }
-
-            Debug.Log("GnomeSort - Lista ordenada: " + string.Join(", ", list));
-        }
-
         // Divide la lista y coloca el pivote en su posición correcta, separando los elementos
-    // menores y mayores alrededor de él.
+        // menores y mayores alrededor de él.
         private static int Partition(List<T> list)
         {
             T pivot = list[list.Count - 1];
@@ -348,19 +372,6 @@ namespace BigO
             Swap(list, i + 1, list.Count - 1);
             return i + 1;
         }
-
-
-        // Algoritmo Merge Sort:
-        // Divide la lista en mitades y ordena recursivamente cada mitad. Luego, fusiona las dos mitades ordenadas.
-        public static void MergeSort(List<T> list)
-        {
-            Debug.Log("MergeSort - Lista inicial: " + string.Join(", ", list));
-            var sortedList = MergeSortRecursive(list);
-            list.Clear();
-            list.AddRange(sortedList);
-            Debug.Log("MergeSort - Lista ordenada: " + string.Join(", ", list));
-        }
-
 
         private static List<T> MergeSortRecursive(List<T> list)
         {
