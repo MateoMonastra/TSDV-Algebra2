@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 
 public class GraphMethods
@@ -333,29 +334,29 @@ public class GraphMethods
     /// <returns></returns>
     public static TSource Single<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-       var result = default(TSource);
+        var result = default(TSource);
 
-       foreach (var element in source)
-       {
-           if (predicate.Invoke(element))
-           {
-               if (result == null)
-               {
-                   result = element;
-               }
-               else
-               {
-                   throw new Exception("There are more than one matching");
-               }
-           }
-       }
+        foreach (var element in source)
+        {
+            if (predicate.Invoke(element))
+            {
+                if (result == null)
+                {
+                    result = element;
+                }
+                else
+                {
+                    throw new Exception("There are more than one matching");
+                }
+            }
+        }
 
-       if (result != null)
-       {
-           return result;
-       }
-       
-       return default(TSource);
+        if (result != null)
+        {
+            return result;
+        }
+
+        return default(TSource);
     }
 
     /// <summary>
@@ -368,23 +369,22 @@ public class GraphMethods
     public static IEnumerable<TSource> SkipWhile<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
         var result = new List<TSource>();
-        
+
         bool save = false;
 
         foreach (var element in source)
         {
-            
             if (!predicate.Invoke(element))
             {
                 save = true;
             }
-            
+
             if (save)
             {
                 result.Add(element);
             }
-
         }
+
         return result;
     }
 
@@ -397,7 +397,7 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> Union<TSource>(IEnumerable<TSource> source1, IEnumerable<TSource> source2)
     {
-        throw new NotImplementedException();
+        return Union(source1, source2, EqualityComparer<TSource>.Default);
     }
 
     /// <summary>
@@ -411,7 +411,25 @@ public class GraphMethods
     public static IEnumerable<TSource> Union<TSource>(IEnumerable<TSource> source1, IEnumerable<TSource> source2,
         IEqualityComparer<TSource> comparer)
     {
-        throw new NotImplementedException();
+        var result = new List<TSource>();
+
+        foreach (var element1 in source1)
+        {
+            result.Add(element1);
+        }
+
+        foreach (var element2 in source2)
+        {
+            foreach (var element3 in result.ToList())
+            {
+                if (!comparer.Equals(element3, element2) && !result.Contains(element2))
+                {
+                    result.Add(element2);
+                }
+            }
+        }
+
+        return result;
     }
 
     /// <summary>

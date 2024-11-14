@@ -189,6 +189,16 @@ namespace TP3
 
         private void TestUnion()
         {
+            var resultList = GraphMethods.ToList(GraphMethods.Union(source1, source2));
+            
+            string logText = "Union result: ";
+            
+            foreach (var element in resultList)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
 
         private void TestWhere()
