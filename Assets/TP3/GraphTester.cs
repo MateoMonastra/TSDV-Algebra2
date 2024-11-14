@@ -96,6 +96,7 @@ namespace TP3
 
         private void TestContains()
         {
+            Debug.Log($"Contains {index.ToString()}: {GraphMethods.Contains(source1, index)}");
         }
 
         private void TestDistinct()

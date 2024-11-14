@@ -48,7 +48,7 @@ public class GraphMethods
     /// <returns></returns>
     public static bool Contains<TSource>(IEnumerable<TSource> source, TSource item)
     {
-        throw new NotImplementedException();
+        return Contains(source, item, EqualityComparer<TSource>.Default);
     }
     /// <summary>
     /// Determines whether a sequence contains a specified element by using a specified IEqualityComparer<T>.
@@ -60,7 +60,14 @@ public class GraphMethods
     /// <returns></returns>
     public static bool Contains<TSource>(IEnumerable<TSource> source, TSource item, IEqualityComparer<TSource> comparer)
     {
-        throw new NotImplementedException();
+        foreach (var variable in source)
+        {
+            if (comparer.Equals(variable,item))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     /// <summary>
     /// Returns distinct elements from a sequence by using the default equality comparer to compare values.
