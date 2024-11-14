@@ -196,7 +196,15 @@ public class GraphMethods
     /// <returns></returns>
     public static TSource First<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        foreach (var element in source)
+        {
+            if (predicate.Invoke(element))
+            {
+                return element;
+            }
+        }
+        
+        return default(TSource);
     }
 
     /// <summary>

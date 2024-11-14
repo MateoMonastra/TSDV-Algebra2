@@ -136,6 +136,7 @@ namespace TP3
 
         private void TestFirst()
         {
+            Debug.Log($"First equal value: {GraphMethods.First(source1, i => i == numTest)}");
         }
 
         private void TestLast()
