@@ -25,20 +25,20 @@ namespace TP3
 
             int halfCount = count / 2;
 
-            
+
             BitonicSortRecursive(list, from, halfCount, true);
-            
+
             BitonicSortRecursive(list, from + halfCount, halfCount, false);
-            
+
             BitonicMerge(list, from, count, ascending);
         }
-        
+
         private static void BitonicMerge<T>(List<T> list, int from, int count, bool ascending) where T : IComparable<T>
         {
             if (count <= 1) return;
 
             int halfCount = count / 2;
-            
+
             for (int i = from; i < from + halfCount; i++)
             {
                 if ((ascending && list[i].CompareTo(list[i + halfCount]) > 0) ||
@@ -47,7 +47,7 @@ namespace TP3
                     Swap(list, i, i + halfCount);
                 }
             }
-            
+
             BitonicMerge(list, from, halfCount, ascending);
             BitonicMerge(list, from + halfCount, halfCount, ascending);
         }
@@ -124,29 +124,20 @@ namespace TP3
         // Algoritmo Quick Sort:
         // Divide la lista en sublistas en torno a un pivote, de manera que los elementos menores
         // están antes del pivote y los mayores después. Luego, ordena recursivamente cada sublista.
-        public static void QuickSort(List<T> list)
+        public static void QuickSort<T>(List<T> list) where T : IComparable<T>
         {
             Debug.Log("QuickSort - Lista inicial: " + string.Join(", ", list));
-            QuickSortRecursive(list);
+            QuickSortRecursive(list, 0, list.Count - 1);
             Debug.Log("QuickSort - Lista ordenada: " + string.Join(", ", list));
         }
-
-        // Método auxiliar recursivo para QuickSort sin parámetros de rango.
-        private static void QuickSortRecursive(List<T> list)
+        
+        private static void QuickSortRecursive<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
-            if (list.Count <= 1) return;
+            if (left >= right) return;
 
-            int pivot = Partition(list);
-            List<T> leftList = list.GetRange(0, pivot);
-            List<T> rightList = list.GetRange(pivot + 1, list.Count - pivot - 1);
-
-            QuickSortRecursive(leftList);
-            QuickSortRecursive(rightList);
-
-            list.Clear();
-            list.AddRange(leftList);
-            list.Add(list[pivot]);
-            list.AddRange(rightList);
+            int pivotIndex = Partition(list, left, right);
+            QuickSortRecursive(list, left, pivotIndex - 1);
+            QuickSortRecursive(list, pivotIndex + 1, right);
         }
 
         private static void RadixLSDSort(List<T> list)
@@ -214,32 +205,31 @@ namespace TP3
             Debug.Log("IntroSort - Lista inicial: " + string.Join(", ", list));
 
             int depthLimit = 2 * (int)Mathf.Log(list.Count); // Define el límite de recursión.
-            IntroSortRecursive(list, depthLimit);
+            IntroSortRecursive(list, 0, list.Count, depthLimit);
 
             Debug.Log("IntroSort - Lista ordenada: " + string.Join(", ", list));
         }
-
-        // Método auxiliar recursivo para IntroSort sin parámetros de rango.
-        private static void IntroSortRecursive(List<T> list, int depthLimit)
+        
+        private static void IntroSortRecursive(List<T> list, int left, int right, int depthLimit)
         {
             if (list.Count < 16)
             {
-                InsertionSort(list); // Usa Insertion Sort para listas pequeñas.
+                InsertionSort(list); 
                 return;
             }
 
             if (depthLimit == 0)
             {
-                HeapSort(list); // Cambia a HeapSort si la profundidad es demasiado alta.
+                HeapSort(list); 
                 return;
             }
 
-            int pivot = Partition(list);
+            int pivot = Partition(list, left, right);
             List<T> leftList = list.GetRange(0, pivot);
             List<T> rightList = list.GetRange(pivot + 1, list.Count - pivot - 1);
 
-            IntroSortRecursive(leftList, depthLimit - 1);
-            IntroSortRecursive(rightList, depthLimit - 1);
+            IntroSortRecursive(leftList, left, right, depthLimit - 1);
+            IntroSortRecursive(rightList, left, right, depthLimit - 1);
             list.Clear();
             list.AddRange(leftList);
             list.Add(list[pivot]);
@@ -348,20 +338,21 @@ namespace TP3
 
         // Divide la lista y coloca el pivote en su posición correcta, separando los elementos
         // menores y mayores alrededor de él.
-        private static int Partition(List<T> list)
+        private static int Partition<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
-            T pivot = list[list.Count - 1];
-            int i = -1;
-            for (int j = 0; j < list.Count - 1; j++)
+            T pivotValue = list[right];
+            int i = left - 1;
+
+            for (int j = left; j < right; j++)
             {
-                if (Compare(list[j], pivot) <= 0)
+                if (list[j].CompareTo(pivotValue) < 0)
                 {
                     i++;
                     Swap(list, i, j);
                 }
             }
 
-            Swap(list, i + 1, list.Count - 1);
+            Swap(list, i + 1, right);
             return i + 1;
         }
 
