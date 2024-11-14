@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 
 public class GraphMethods
 {
@@ -294,7 +295,7 @@ public class GraphMethods
                 resultCount++;
             }
         }
-        
+
         return resultCount;
     }
 
@@ -309,7 +310,18 @@ public class GraphMethods
     public static bool SequenceEqual<TSource>(IEnumerable<TSource> source1, IEnumerable<TSource> source2,
         IEqualityComparer<TSource> comparer)
     {
-        throw new NotImplementedException();
+        foreach (var element in source1)
+        {
+            foreach (var element2 in source2)
+            {
+                if (!comparer.Equals(element2, element))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -321,7 +333,29 @@ public class GraphMethods
     /// <returns></returns>
     public static TSource Single<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+       var result = default(TSource);
+
+       foreach (var element in source)
+       {
+           if (predicate.Invoke(element))
+           {
+               if (result == null)
+               {
+                   result = element;
+               }
+               else
+               {
+                   throw new Exception("There are more than one matching");
+               }
+           }
+       }
+
+       if (result != null)
+       {
+           return result;
+       }
+       
+       return default(TSource);
     }
 
     /// <summary>
@@ -333,7 +367,25 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> SkipWhile<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        var result = new List<TSource>();
+        
+        bool save = false;
+
+        foreach (var element in source)
+        {
+            
+            if (!predicate.Invoke(element))
+            {
+                save = true;
+            }
+            
+            if (save)
+            {
+                result.Add(element);
+            }
+
+        }
+        return result;
     }
 
     /// <summary>

@@ -165,14 +165,26 @@ namespace TP3
 
         private void TestSequenceEqual()
         {
+            Debug.Log($"Are Equal: {GraphMethods.SequenceEqual(source1, source2, EqualityComparer<int>.Default)}");
         }
 
         private void TestSingle()
         {
+            Debug.Log($"Are only one {numTest}: {GraphMethods.Single(source1, i => i == numTest)}");
         }
 
         private void TestSkipWhile()
         {
+            var resultList = GraphMethods.ToList(GraphMethods.SkipWhile(source1, i => i == numTest));
+            
+            string logText = "SkipWhile result: ";
+            
+            foreach (var element in resultList)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
 
         private void TestUnion()
