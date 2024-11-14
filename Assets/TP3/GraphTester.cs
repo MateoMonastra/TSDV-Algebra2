@@ -117,10 +117,21 @@ namespace TP3
 
         private void TestElementAt()
         {
+            Debug.Log($"Element at: {numTest}: {GraphMethods.ElementAt(source1, numTest)}");
         }
 
         private void TestExcept()
         {
+            var exceptsList = GraphMethods.ToList(GraphMethods.Except(source1, source2));
+            
+            string logText = "Excepts: ";
+            
+            foreach (var element in exceptsList)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
 
         private void TestFirst()
