@@ -441,7 +441,24 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> Where<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        var result = new List<TSource>();
+
+        bool save = true;
+
+        foreach (var element in source)
+        {
+            if (!predicate.Invoke(element))
+            {
+                save = false;
+            }
+
+            if (save)
+            {
+                result.Add(element);
+            }
+        }
+
+        return result;
     }
 
     public static List<TSource> ToList<TSource>(IEnumerable<TSource> source)

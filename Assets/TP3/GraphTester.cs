@@ -203,6 +203,16 @@ namespace TP3
 
         private void TestWhere()
         {
+            var resultList = GraphMethods.ToList(GraphMethods.Where(source1, i => i == numTest));
+            
+            string logText = "SkipWhile result: ";
+            
+            foreach (var element in resultList)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
     }
 }
