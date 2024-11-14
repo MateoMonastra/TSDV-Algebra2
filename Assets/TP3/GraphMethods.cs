@@ -264,9 +264,12 @@ public class GraphMethods
 
         foreach (var element in source1)
         {
-            if (Contains(source2, element))
+            foreach (var element2 in source2)
             {
-                result.Add(element);
+                if (comparer.Equals(element2, element) && !result.Contains(element))
+                {
+                    result.Add(element);
+                }
             }
         }
 
@@ -282,7 +285,17 @@ public class GraphMethods
     /// <returns></returns>
     public static int Count<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        throw new NotImplementedException();
+        var resultCount = 0;
+
+        foreach (var element in source)
+        {
+            if (predicate.Invoke(element))
+            {
+                resultCount++;
+            }
+        }
+        
+        return resultCount;
     }
 
     /// <summary>

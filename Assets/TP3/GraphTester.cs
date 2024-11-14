@@ -160,6 +160,7 @@ namespace TP3
 
         private void TestCount()
         {
+            Debug.Log($"Count of {numTest}: {GraphMethods.Count(source1, i => i == numTest)}");
         }
 
         private void TestSequenceEqual()
