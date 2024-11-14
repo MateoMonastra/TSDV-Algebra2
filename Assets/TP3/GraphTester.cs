@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TP3
 {
@@ -28,7 +30,7 @@ namespace TP3
         [SerializeField] private List<int> source1 = new List<int>();
         [SerializeField] private List<int> source2 = new List<int>();
         [SerializeField] private Methods method;
-        [SerializeField] private int index;
+        [SerializeField] private int numTest;
     
         private void Start()
         {
@@ -86,21 +88,31 @@ namespace TP3
 
         private void TestAll()
         {
-            Debug.Log($"All are {index.ToString()}: {GraphMethods.All(source1, i => i == index)}");
+            Debug.Log($"All are {numTest.ToString()}: {GraphMethods.All(source1, i => i == numTest)}");
         }
         private void TestAny()
         {
-            Debug.Log($"Any is {index.ToString()}: {GraphMethods.Any(source1, i => i == index)}");
+            Debug.Log($"Any is {numTest.ToString()}: {GraphMethods.Any(source1, i => i == numTest)}");
         }
 
 
         private void TestContains()
         {
-            Debug.Log($"Contains {index.ToString()}: {GraphMethods.Contains(source1, index)}");
+            Debug.Log($"Contains {numTest.ToString()}: {GraphMethods.Contains(source1, numTest)}");
         }
 
         private void TestDistinct()
         {
+            var distinctInts = GraphMethods.ToList(GraphMethods.Distinct(source1));
+            
+            var logText = "Distincts: ";
+            
+            foreach (var element in distinctInts)
+            {
+                logText += $"{element}, ";
+            }
+
+            Debug.Log(logText);
         }
 
         private void TestElementAt()

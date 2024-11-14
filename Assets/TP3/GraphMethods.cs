@@ -12,9 +12,9 @@ public class GraphMethods
     /// <returns></returns>
     public static bool All<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
-        foreach (var variable in source)
+        foreach (var element in source)
         {
-            if (!predicate.Invoke(variable))
+            if (!predicate.Invoke(element))
             {
                 return false;
             }
@@ -30,9 +30,9 @@ public class GraphMethods
     /// <returns></returns>
     public static bool Any<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate) 
     {
-        foreach (var variable in source)
+        foreach (var element in source)
         {
-            if (predicate.Invoke(variable))
+            if (predicate.Invoke(element))
             {
                 return true;
             }
@@ -60,9 +60,9 @@ public class GraphMethods
     /// <returns></returns>
     public static bool Contains<TSource>(IEnumerable<TSource> source, TSource item, IEqualityComparer<TSource> comparer)
     {
-        foreach (var variable in source)
+        foreach (var element in source)
         {
-            if (comparer.Equals(variable,item))
+            if (comparer.Equals(element,item))
             {
                 return true;
             }
@@ -77,7 +77,7 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> Distinct<TSource>(IEnumerable<TSource> source)
     {
-        throw new NotImplementedException();
+        return Distinct(source, EqualityComparer<TSource>.Default);
     }
     /// <summary>
     /// Returns distinct elements from a sequence by using a specified IEqualityComparer<T> to compare values.
@@ -88,7 +88,31 @@ public class GraphMethods
     /// <returns></returns>
     public static IEnumerable<TSource> Distinct<TSource>(IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
     {
-        throw new NotImplementedException();
+
+        var result = new List<TSource>();
+        foreach (var element in source)
+        {
+            if (result.Count == 0)
+                result.Add(element);
+
+            var isDistinct = true;
+            
+            foreach (var t in result)
+            {
+                if (comparer.Equals(element, t))
+                {
+                    isDistinct = false;
+                    break;
+                }
+            }
+
+            if (isDistinct)
+            {
+                result.Add(element);
+            }
+        }
+        
+        return result;
     }
     /// <summary>
     /// Returns the element at a specified index in a sequence.
@@ -247,5 +271,16 @@ public class GraphMethods
     public static IEnumerable<TSource> Where<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
     {
         throw new NotImplementedException();
+    }
+    
+    public static List<TSource> ToList<TSource>(IEnumerable<TSource> source)
+    {
+        List<TSource> list = new List<TSource>();
+        foreach (TSource data in source)
+        {
+            list.Add(data);
+        }
+
+        return list;
     }
 }
