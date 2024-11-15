@@ -14,6 +14,7 @@ namespace TP3
         #region SortingMethods
 
         // Algoritmo Bogo Sort:
+        //Memory: O(n!)
         // Ordena la lista aleatoriamente hasta que esté en el orden correcto.
         public static void BogoSort(List<T> list)
         {
@@ -29,6 +30,7 @@ namespace TP3
         }
 
         // Algoritmo Bubble Sort:
+        //Memory: O(n^2)
         // Recorre la lista repetidamente, moviendo los elementos más grandes al final de la lista.
         public static void BubbleSort(List<T> list)
         {
@@ -50,6 +52,7 @@ namespace TP3
 
 
         // Algoritmo Selection Sort:
+        //Memory: O(n^2)
         // Selecciona el elemento más pequeño y lo coloca al inicio de la lista, repitiendo este proceso para
         // cada posición de la lista hasta que esté completamente ordenada.
         public static void SelectionSort(List<T> list)
@@ -74,6 +77,7 @@ namespace TP3
         }
 
         // Algoritmo Gnome Sort:
+        //Memory: O(n^2)
         // Similar a la ordenación por inserción, pero realiza intercambios de elementos y retrocede
         // si encuentra un desorden.
         public static void GnomeSort(List<T> list)
@@ -98,6 +102,7 @@ namespace TP3
         }
 
         // Algoritmo Cocktail Shaker Sort:
+        //Memory: O(n^2)
         // Es una variación del Bubble Sort. Ordena en ambas direcciones alternadamente en cada pasada.
         // Mueve los elementos más grandes al final y los más pequeños al inicio de la lista en cada ciclo.
         public static void CocktailShakerSort(List<T> list)
@@ -141,6 +146,7 @@ namespace TP3
         }
 
         // Algoritmo Insertion Sort:
+        //Memory: O(n^2)
         // Toma cada elemento de la lista y lo inserta en su posición correcta en una sublista ordenada al inicio.
         public static void InsertionSort<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
@@ -194,6 +200,7 @@ namespace TP3
         }
 
         // Algoritmo Merge Sort:
+        //Memory: O(n log n)
         // Divide la lista en mitades y ordena recursivamente cada mitad. Luego, fusiona las dos mitades ordenadas.
         public static void MergeSort(List<T> list)
         {
@@ -215,8 +222,7 @@ namespace TP3
 
             return Merge(left, right);
         }
-
-        // Fusiona dos listas ordenadas en una lista completamente ordenada.
+        
         private static List<T> Merge(List<T> left, List<T> right)
         {
             List<T> result = new List<T>();
@@ -237,6 +243,7 @@ namespace TP3
 
 
         // Algoritmo Heap Sort:
+        //Memory: O(n log n)
         public static void HeapSort<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
             Debug.Log("HeapSort - Lista inicial: " + string.Join(", ", list));
@@ -277,6 +284,8 @@ namespace TP3
 
 
         // Algoritmo Bitonic Sort
+        // Funciona solo para tamaños que sean potencias de 2.
+        // Memory: O(n log^2 n)
         public static void BitonicSort<T>(List<T> list) where T : IComparable<T>
         {
             Debug.Log("BitonicSort - Lista inicial: " + string.Join(", ", list));
@@ -320,6 +329,7 @@ namespace TP3
 
 
         // Algoritmo Quick Sort:
+        // Memory: O(n^2) en el peor caso, pero O(n log n) en el promedio
         // Divide la lista en sublistas en torno a un pivote, de manera que los elementos menores
         // están antes del pivote y los mayores después. Luego, ordena recursivamente cada sublista.
         public static void QuickSort<T>(List<T> list) where T : IComparable<T>
@@ -414,6 +424,7 @@ namespace TP3
         private static void AdaptiveMerge<T>(List<T> list, int from, int middle, int to) where T : IComparable<T>
         {
             int left = from, right = middle + 1;
+            
             List<T> temp = new List<T>();
 
             while (left <= middle && right <= to)
