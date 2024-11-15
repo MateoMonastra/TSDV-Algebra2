@@ -129,7 +129,7 @@ namespace TP3
 
         private void TestAdaptive()
         {
-            throw new NotImplementedException();
+            Sorter<int>.AdaptiveSort(list);
         }
 
         private void TestBubble()
@@ -149,12 +149,12 @@ namespace TP3
 
         private void TestHeap()
         {
-            Sorter<int>.HeapSort(list, 0, list.Count);
+            Sorter<int>.HeapSort(list, 0, list.Count-1);
         }
 
         private void TestInsertion()
         {
-            Sorter<int>.InsertionSort(list,0, list.Count);
+            Sorter<int>.InsertionSort(list,0, list.Count-1);
         }
     }
 }

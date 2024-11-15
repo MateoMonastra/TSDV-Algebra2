@@ -17,7 +17,6 @@ namespace TP3
             Debug.Log("BitonicSort - Lista ordenada: " + string.Join(", ", list));
         }
 
-
         private static void BitonicSortRecursive<T>(List<T> list, int from, int count, bool ascending)
             where T : IComparable<T>
         {
@@ -51,7 +50,6 @@ namespace TP3
             BitonicMerge(list, from, halfCount, ascending);
             BitonicMerge(list, from + halfCount, halfCount, ascending);
         }
-
 
         // Algoritmo Selection Sort:
         // Selecciona el elemento más pequeño y lo coloca al inicio de la lista, repitiendo este proceso para
@@ -184,7 +182,7 @@ namespace TP3
             Debug.Log("BogoSort - Lista inicial: " + string.Join(", ", list));
 
             
-            while (!IsSorted(list))
+            while (!IsSorted(list,0,list.Count,1))
             {
                 Shuffle(list);
             }
@@ -230,9 +228,64 @@ namespace TP3
             IntroSortRecursive(list, left, pivot - 1, depthLimit - 1);
             IntroSortRecursive(list, pivot + 1, right, depthLimit - 1);
         }
-        private static void AdaptiveSort(List<T> list)
+        public static void AdaptiveSort(List<T> list)
         {
-            Debug.Log("Implementation needed");
+            Debug.Log("AdaptiveMergeSort - Lista inicial: " + string.Join(", ", list));
+            RecursiveAdaptiveMergeSort(list, 0, list.Count - 1);
+            Debug.Log("AdaptiveMergeSort - Lista ordenada: " + string.Join(", ", list));
+        }
+        private static void RecursiveAdaptiveMergeSort<T>(List<T> list, int from, int to) where T : IComparable<T>
+        {
+            if (from >= to) return;
+
+            int middle = from + (to - from) / 2;
+            
+            if (IsSorted(list, from, to, 0))
+            {
+                Inverse(list, from, to);
+            }
+            else
+            {
+                if (IsSorted(list, from, middle, 0))
+                    Inverse(list, from, middle);
+                if (IsSorted(list, middle + 1, to, 0))
+                    Inverse(list, middle + 1, to);
+            }
+            
+            if (!IsSorted(list, from, to, 1))
+            {
+                if (!IsSorted(list, from, middle, 1))
+                    RecursiveAdaptiveMergeSort(list, from, middle);
+
+                if (!IsSorted(list, middle + 1, to, 1))
+                    RecursiveAdaptiveMergeSort(list, middle + 1, to);
+
+                AdaptiveMerge(list, from, middle, to);
+            }
+        }
+        private static void AdaptiveMerge<T>(List<T> list, int from, int middle, int to) where T : IComparable<T>
+        {
+            int left = from, right = middle + 1;
+            List<T> temp = new List<T>();
+
+            while (left <= middle && right <= to)
+            {
+                if (list[left].CompareTo(list[right]) <= 0)
+                    temp.Add(list[left++]);
+                else
+                    temp.Add(list[right++]);
+            }
+
+            while (left <= middle)
+                temp.Add(list[left++]);
+    
+            while (right <= to)
+                temp.Add(list[right++]);
+
+            for (int i = 0; i < temp.Count; i++)
+            {
+                list[from + i] = temp[i];
+            }
         }
 
         // Algoritmo Bubble Sort:
@@ -320,11 +373,11 @@ namespace TP3
 
             return result;
         }
-
-
+        
         // Algoritmo Heap Sort:
         public static void HeapSort<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
+            Debug.Log("HeapSort - Lista inicial: " + string.Join(", ", list));
             int size = right - left + 1;
 
             
@@ -337,6 +390,7 @@ namespace TP3
                 Swap(list, left, i); 
                 Heapify(list, i - left, left, left);
             }
+            Debug.Log("HeapSort - Lista ordenada: " + string.Join(", ", list));
         }
         
         private static void Heapify<T>(List<T> list, int size, int root, int offset) where T : IComparable<T>
@@ -362,6 +416,8 @@ namespace TP3
         // Toma cada elemento de la lista y lo inserta en su posición correcta en una sublista ordenada al inicio.
         public static void InsertionSort<T>(List<T> list, int left, int right) where T : IComparable<T>
         {
+            Debug.Log("InsertionSort - Lista inicial: " + string.Join(", ", list));
+            
             for (int i = left + 1; i <= right; i++)
             {
                 T key = list[i];
@@ -373,23 +429,23 @@ namespace TP3
                 }
                 list[j + 1] = key;
             }
+            Debug.Log("InsertionSort - Lista ordenada: " + string.Join(", ", list));
         }
 
         #endregion
 
         #region Utilities
 
-        public static bool IsSorted(List<T> list)
+        private static bool IsSorted<T>(List<T> list, int from, int to, int direction) where T : IComparable<T>
         {
-            for (int i = 1; i < list.Count; i++)
+            for (int i = from; i < to; i++)
             {
-                if (list[i - 1].CompareTo(list[i]) > 0)
+                if ((direction == 0 && list[i].CompareTo(list[i + 1]) > 0) ||
+                    (direction == 1 && list[i].CompareTo(list[i + 1]) < 0))
                     return false;
             }
-
             return true;
         }
-
         public static void Shuffle(List<T> list)
         {
             T aux;
@@ -431,6 +487,16 @@ namespace TP3
 
             Swap(list, i + 1, right);
             return i + 1;
+        }
+        
+        private static void Inverse<T>(List<T> list, int from, int to)
+        {
+            while (from < to)
+            {
+                Swap(list, from, to);
+                from++;
+                to--;
+            }
         }
 
 
