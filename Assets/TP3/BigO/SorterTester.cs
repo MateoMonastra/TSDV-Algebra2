@@ -119,7 +119,7 @@ namespace TP3
 
         private void TestRadixMSD()
         {
-            throw new NotImplementedException();
+            Sorter<int>.RadixMSDSort(list);
         }
 
         private void TestIntro()
