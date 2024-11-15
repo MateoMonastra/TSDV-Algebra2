@@ -104,7 +104,7 @@ namespace TP3
 
         private void TestRadixLSD()
         {
-            throw new NotImplementedException();
+            Sorter<int>.RadixLSDSort(list);
         }
 
         private void TestShell()

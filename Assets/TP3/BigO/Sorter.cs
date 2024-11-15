@@ -1,7 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
 
 namespace TP3
 {
@@ -138,9 +142,55 @@ namespace TP3
             QuickSortRecursive(list, pivotIndex + 1, right);
         }
 
-        private static void RadixLSDSort(List<T> list)
+        public static void RadixLSDSort(List<T> list)
         {
-            Debug.Log("Implementation needed");
+            Debug.Log("RadixLSDSort - Lista inicial: " + string.Join(", ", list));
+            List<uint> ints = GetIntsFromT(list);
+            uint biggestNum = ints[0];
+            for (int i = 1; i < ints.Count; i++)
+            {
+                if (ints[i] > biggestNum)
+                    biggestNum = ints[i];
+            }
+
+            int maxDigits = GetNumberOfDigits(Convert.ToInt32(biggestNum));
+
+            uint digitMultiplier = 10;
+            List<int>[] buckets = new List<int>[10];
+
+            for (int i = 0; i < buckets.Length; i++)
+            {
+                buckets[i] = new List<int>();
+            }
+
+            for (int i = 0; i < maxDigits; i++)
+            {
+                for (int j = 0; j < ints.Count; j++)
+                {
+                    uint digitResult = ints[j] / (digitMultiplier / 10) % 10;
+                    buckets[digitResult].Add(j);
+                }
+
+                List<T> auxList = CloneList(list);
+                List<uint> auxNumbers = Sorter<uint>.CloneList(ints);
+
+                list.Clear();
+                ints.Clear();
+
+                for (int bucketIndex = 0; bucketIndex < buckets.Length; bucketIndex++)
+                {
+                    for (int j = 0; j < buckets[bucketIndex].Count; j++)
+                    {
+                        list.Add(auxList[buckets[bucketIndex][j]]);
+                        ints.Add(auxNumbers[buckets[bucketIndex][j]]);
+                    }
+                }
+
+                digitMultiplier *= 10;
+                for (int j = 0; j < buckets.Length; j++)
+                    buckets[j].Clear();
+                Debug.Log("RadixLSDSort - Lista ordenada: " + string.Join(", ", list));
+            }
         }
 
         // Algoritmo Shell Sort:
@@ -182,7 +232,7 @@ namespace TP3
             Debug.Log("BogoSort - Lista inicial: " + string.Join(", ", list));
 
             
-            while (!IsSorted(list,0,list.Count,1))
+            while (!IsSorted(list,0,list.Count-1,0))
             {
                 Shuffle(list);
             }
@@ -497,6 +547,64 @@ namespace TP3
                 from++;
                 to--;
             }
+        }
+        
+        private static uint GetIntFromBitArray(List<uint> bits)
+        {
+            uint result = 0;
+            for (int i = bits.Count - 1; i >= 0; i--)
+            {
+                result *= 2;
+                result += bits[i];
+            }
+
+            return result;
+        }
+        
+        private static List<uint> GetIntsFromT(List<T> list)
+        {
+            List<BitArray> bitArrays = new List<BitArray>();
+
+            List<uint> ints = new List<uint>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                MemoryStream ms = new MemoryStream();
+                bf.Serialize(ms, list[i]);
+                bitArrays.Add(new BitArray(ms.ToArray()));
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                List<uint> bits = new List<uint>();
+                for (int j = bitArrays[i].Count - 40; j < bitArrays[i].Count - 8; j++)
+                {
+                    bits.Add(Convert.ToUInt32(bitArrays[i][j]));
+                }
+
+                ints.Add(GetIntFromBitArray(bits));
+            }
+
+            return ints;
+        }
+        
+        private static int GetNumberOfDigits(int number)
+        {
+            if (number < 10)
+                return 1;
+
+            return 1 + GetNumberOfDigits(number / 10);
+        }
+
+        private static List<T> CloneList(List<T> list)
+        {
+            List<T> auxList = new List<T>();
+            for (int k = 0; k < list.Count; k++)
+            {
+                auxList.Add(list[k]);
+            }
+
+            return auxList;
         }
 
 
