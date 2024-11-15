@@ -6,6 +6,8 @@ public class GraphMethods
 {
     /// <summary>
     /// Determines whether all elements of a sequence satisfy a condition.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -26,6 +28,8 @@ public class GraphMethods
 
     /// <summary>
     /// Determines whether any element of a sequence satisfies a condition.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -46,6 +50,8 @@ public class GraphMethods
 
     /// <summary>
     /// Determines whether a sequence contains a specified element by using the default equality comparer.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -79,6 +85,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns distinct elements from a sequence by using the default equality comparer to compare values.
+    /// Time: O(n^2)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -127,6 +135,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns the element at a specified index in a sequence.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -163,6 +173,8 @@ public class GraphMethods
 
     /// <summary>
     /// Produces the set difference of two sequences by using the specified IEqualityComparer<T> to compare values.
+    /// Time: O(n1 * n2)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source1"></param>
@@ -190,6 +202,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns the first element in a sequence that satisfies a specified condition.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -210,6 +224,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns the last element of a sequence that satisfies a specified condition.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -240,6 +256,8 @@ public class GraphMethods
 
     /// <summary>
     /// Produces the set intersection of two sequences by using the default equality comparer to compare values.
+    /// Time: O(n1 * n2)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source1"></param>
@@ -279,6 +297,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns a number that represents how many elements in the specified sequence satisfy a condition.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -301,6 +321,8 @@ public class GraphMethods
 
     /// <summary>
     /// Determines whether two sequences are equal by comparing their elements by using a specified IEqualityComparer<T>.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source1"></param>
@@ -326,6 +348,8 @@ public class GraphMethods
 
     /// <summary>
     /// Returns the only element of a sequence that satisfies a specified condition, and throws an exception if more than one such element exists.
+    /// Time: O(n)
+    /// Memory: O(1)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -360,6 +384,8 @@ public class GraphMethods
 
     /// <summary>
     /// Bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
+    /// Time: O(n)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
@@ -389,6 +415,8 @@ public class GraphMethods
 
     /// <summary>
     /// Produces the set union of two sequences by using the default equality comparer.
+    /// Time: O(n^2)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source1"></param>
@@ -433,6 +461,8 @@ public class GraphMethods
 
     /// <summary>
     /// Filters a sequence of values based on a predicate. Each element's index is used in the logic of the predicate function.
+    /// Time: O(n)
+    /// Memory: O(n)
     /// </summary>
     /// <typeparam name="TSource"></typeparam>
     /// <param name="source"></param>
