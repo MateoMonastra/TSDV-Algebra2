@@ -1,4 +1,5 @@
 using System;
+using TP1_TP2.Utilities;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
@@ -61,7 +62,7 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
     }
 
      // Returns or sets the euler angle representation of the rotation.
-        public Vector3 EulerAngles
+        public Vec3 EulerAngles
         {
             get
             {
@@ -75,13 +76,13 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
                 if (testXAngle > errorValue * unitToUse)
                 {
                     // Set values to not have gimbal lock. (X with value and Z = 0)
-                    return NormalizeAngles(new Vector3(Mathf.PI / 2, 2f * Mathf.Atan2(this.y, this.x), 0));
+                    return NormalizeAngles(new Vec3(Mathf.PI / 2, 2f * Mathf.Atan2(this.y, this.x), 0));
                 } 
                 // if there is a singularity at the south pole
                 if (testXAngle < -errorValue * unitToUse)
                 {
                     // Set values to not have gimbal lock. (X with value and Z = 0)
-                    return NormalizeAngles(new Vector3(-Mathf.PI / 2, -2f * Mathf.Atan2(this.y, this.x), 0));
+                    return NormalizeAngles(new Vec3(-Mathf.PI / 2, -2f * Mathf.Atan2(this.y, this.x), 0));
                 }
                 
                 // No singularities. Then, we apply the inverse of the euler angle to quaternion conversion.
@@ -91,7 +92,7 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
                 MyQuaternion qToCalc = new MyQuaternion(this.w, this.z, this.x, this.y);
 
                 return NormalizeAngles(
-                    new Vector3(
+                    new Vec3(
                             Mathf.Atan2(2f * (qToCalc.x * qToCalc.w + qToCalc.y * qToCalc.z), 1 - 2f * (qToCalc.z * qToCalc.z + qToCalc.w * qToCalc.w)),
                             Mathf.Asin(2f * (qToCalc.x * qToCalc.z - qToCalc.w * qToCalc.y)),
                             Mathf.Atan2(2f * (qToCalc.x * qToCalc.y + qToCalc.z * qToCalc.w), 1 - 2f * (qToCalc.y * qToCalc.y + qToCalc.z * qToCalc.z))
@@ -129,9 +130,9 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
         this.w = newW;
     }
     
-    private Vector3 NormalizeAngles(Vector3 someEulerAngles)
+    private Vec3 NormalizeAngles(Vector3 someEulerAngles)
     {
-        return new Vector3(NormalizeAngle(someEulerAngles.x), NormalizeAngle(someEulerAngles.y),
+        return new Vec3(NormalizeAngle(someEulerAngles.x), NormalizeAngle(someEulerAngles.y),
             NormalizeAngle(someEulerAngles.z));
     }
 
@@ -415,13 +416,13 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
             a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z);
     }
 
-    public static Vector3 operator *(MyQuaternion rotation, Vector3 point)
+    public static Vec3 operator *(MyQuaternion rotation, Vector3 point)
     {
         MyQuaternion pureVectorQuaternion = new MyQuaternion(point.x, point.y, point.z, 0);
         //con el conjugado retraer el movimiento indeseado
         MyQuaternion appliedPureQuaternion = rotation * pureVectorQuaternion * Conjugated(rotation);
 
-        return new Vector3(appliedPureQuaternion.x, appliedPureQuaternion.y, appliedPureQuaternion.z);
+        return new Vec3(appliedPureQuaternion.x, appliedPureQuaternion.y, appliedPureQuaternion.z);
     }
 
     public static MyQuaternion operator *(MyQuaternion q, float value)

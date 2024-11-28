@@ -79,8 +79,9 @@ namespace TP1_TP2
             if (newParent != null)
             {
                 newParent.AddChildren(this);
-                
-                localPosition = new Vec3(MyQuaternion.Inverse(newParent.Rotation) * (worldPosition - newParent.position));
+
+                localPosition =
+                    new Vec3(MyQuaternion.Inverse(newParent.Rotation) * (worldPosition - newParent.position));
             }
 
             hasChanged = true;
@@ -188,42 +189,92 @@ namespace TP1_TP2
 
         public void Rotate(Vec3 eulers, Space relativeTo)
         {
-            throw new NotImplementedException();
+            MyQuaternion eulerRot = MyQuaternion.Euler(eulers.x, eulers.y, eulers.z);
+
+            if (relativeTo == Space.Self)
+            {
+                LocalRotation *= eulerRot;
+
+                if (parent != null)
+                {
+                    Rotation = parent.Rotation * LocalRotation;
+                }
+                else
+                {
+                    Rotation = LocalRotation;
+                }
+            }
+            else
+            {
+                Rotation = Rotation * (MyQuaternion.Inverse(Rotation) * eulerRot * Rotation);
+
+                if (parent != null)
+                {
+                    LocalRotation = MyQuaternion.Inverse(parent.Rotation) * Rotation;
+                }
+                else
+                {
+                    LocalRotation = Rotation;
+                }
+            }
+
+            UpdateMatrix();
         }
 
         public void Rotate(Vec3 eulers)
         {
-            throw new NotImplementedException();
+            Rotate(eulers, Space.Self);
         }
 
         public void Rotate(float xAngle, float yAngle, float zAngle)
         {
-            throw new NotImplementedException();
+            Rotate(new Vec3(xAngle, yAngle, zAngle));
         }
 
         public void Rotate(float xAngle, float yAngle, float zAngle, Space relativeTo)
         {
-            throw new NotImplementedException();
+            Rotate(new Vec3(xAngle, yAngle, zAngle), relativeTo);
         }
 
         public void Rotate(Vec3 axis, float angle, Space relativeTo)
         {
-            throw new NotImplementedException();
+            MyQuaternion axisRotation = MyQuaternion.AngleAxis(angle, axis);
+
+            if (relativeTo == Space.Self)
+            {
+                LocalRotation = LocalRotation * axisRotation;
+            }
+            else
+            {
+                Rotation = Rotation * (MyQuaternion.Inverse(Rotation) * axisRotation * Rotation);
+            }
         }
 
         public void Rotate(Vec3 axis, float angle)
         {
-            throw new NotImplementedException();
+            Rotate(axis, angle, Space.Self);
         }
 
         public void RotateAround(Vec3 point, Vec3 axis, float angle)
         {
-            throw new NotImplementedException();
+            axis = axis.normalized;
+
+            MyQuaternion newRotation = MyQuaternion.AngleAxis(angle, axis);
+
+            Vec3 localPoint = position - point;
+
+            Vec3 rotatedPoint = newRotation * localPoint;
+
+            position = rotatedPoint + point;
+
+            this.Rotation = newRotation * this.Rotation;
+
+            UpdateMatrix();
         }
 
         public void RotateAround(Vec3 axis, float angle)
         {
-            throw new NotImplementedException();
+            RotateAround(Vec3.Zero, axis, angle);
         }
 
         public void SetLocalPositionAndRotation(Vec3 localPosition, MyQuaternion rotation)
@@ -343,17 +394,38 @@ namespace TP1_TP2
 
         private void UpdateWorldToLocalMatrix()
         {
-            throw new NotImplementedException();
+            if (parent != null)
+            {
+                position = new Vec3(parent.Rotation * localPosition + parent.position);
+                Rotation = parent.Rotation * LocalRotation;
+            }
+            else
+            {
+                WorldToLocalMatrix = LocalToWorldMatrix.inverse;
+            }
+
+            eulerAngles = Rotation.EulerAngles;
+
+            hasChanged = true;
+
+            UpdateChildrens();
         }
 
         private void UpdateMatrix()
         {
-            throw new NotImplementedException();
+            UpdateLocalToWorldMatrix();
+            UpdateWorldToLocalMatrix();
         }
 
         private void UpdateChildrens()
         {
-            throw new NotImplementedException();
+            foreach (MyTransform child in childrens)
+            {
+                if (child != null)
+                {
+                    child.UpdateWorldToLocalMatrix();
+                }
+            }
         }
     }
 }
