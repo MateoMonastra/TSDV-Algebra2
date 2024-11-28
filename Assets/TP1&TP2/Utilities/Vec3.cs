@@ -17,7 +17,7 @@ namespace TP1_TP2.Utilities
             get { return x * x + y * y + z * z; }
         }
 
-        public Vector3 normalized
+        public Vec3 normalized
         {
             get { return new Vec3(x / this.magnitude, y / this.magnitude, z / this.magnitude); }
         }

@@ -115,37 +115,75 @@ namespace TP1_TP2
 
         public void AddChildren(MyTransform children)
         {
-            throw new NotImplementedException();
+            childrens.Add(children);
+            children.parent = this;
+            childCount++;
         }
 
         public void LookAt(Vec3 targetPosition)
         {
-            throw new NotImplementedException();
+            Vec3 direction = (targetPosition - position).normalized;
+
+            MyQuaternion newRotation = MyQuaternion.LookRotation(direction, Vec3.Up);
+
+            Rotation = newRotation;
+
+            if (parent != null)
+            {
+                LocalRotation = MyQuaternion.Inverse(parent.Rotation) * Rotation;
+            }
+            else
+            {
+                LocalRotation = Rotation;
+            }
+
+            hasChanged = true;
+
+            UpdateMatrix();
         }
 
         public void LookAt(Vec3 targetPosition, Vec3 worldUp)
         {
-            throw new NotImplementedException();
+            Vec3 direction = (targetPosition - position).normalized;
+
+            Vec3 up = worldUp.normalized;
+
+            MyQuaternion newRotation = MyQuaternion.LookRotation(direction, up);
+
+            Rotation = newRotation;
+
+            if (parent != null)
+            {
+                LocalRotation = MyQuaternion.Inverse(parent.Rotation) * Rotation;
+            }
+            else
+            {
+                LocalRotation = Rotation;
+            }
+
+            hasChanged = true;
+
+            UpdateMatrix();
         }
 
         public void LookAt(MyTransform target)
         {
-            throw new NotImplementedException();
+            LookAt(target.position);
         }
 
         public void LookAt(Transform target)
         {
-            throw new NotImplementedException();
+            LookAt(new Vec3(target.position));
         }
 
         public void LookAt(MyTransform target, Vec3 worldUp)
         {
-            throw new NotImplementedException();
+            LookAt(target.position, worldUp);
         }
 
         public void LookAt(Transform target, Vec3 worldUp)
         {
-            throw new NotImplementedException();
+            LookAt(new Vec3(target.position), worldUp);
         }
 
         public void Rotate(Vec3 eulers, Space relativeTo)
