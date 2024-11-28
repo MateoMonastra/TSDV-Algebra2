@@ -7,34 +7,110 @@ namespace TP1_TP2
 {
     public class MyTransform : MonoBehaviour
     {
+        public Vec3 position;
+        public Vec3 localPosition;
+        public MyQuaternion Rotation;
+        public MyQuaternion LocalRotation;
+        public Vec3 eulerAngles;
+        public Vec3 localEulerAngles;
+        public Vec3 right;
+        public Vec3 up;
+        public Vec3 forward;
+
+        public MyMatrix4x4 WorldToLocalMatrix;
+        public MyMatrix4x4 LocalToWorldMatrix;
+
+
+        public Vec3 lossyScale;
+        public Vec3 localScale;
+        public bool hasChanged;
+        public MyTransform parent;
+        public List<MyTransform> childrens;
+        public int childCount;
+
+
         public MyTransform()
         {
-            throw new NotImplementedException();
+            Rotation = MyQuaternion.Identity;
+            LocalRotation = MyQuaternion.Identity;
+            WorldToLocalMatrix = MyMatrix4x4.Identity;
+
+            childrens = new List<MyTransform>();
         }
 
         public void DetachChildrens()
         {
-            throw new NotImplementedException();
+            foreach (MyTransform child in childrens)
+            {
+                child.SetParent(null);
+            }
+
+            childCount = 0;
+            childrens.Clear();
+
+            hasChanged = true;
         }
 
         public void DetachChildren(MyTransform children)
         {
-            throw new NotImplementedException();
+            childrens.Remove(children);
+            childCount--;
         }
 
         public int GetChildCount()
         {
-            throw new NotImplementedException();
+            return childCount;
         }
 
         public void SetParent(MyTransform newParent)
         {
-            throw new NotImplementedException();
+            if (this.parent != null)
+            {
+                this.parent.DetachChildren(this);
+                this.parent = null;
+            }
+
+            Vec3 worldPosition = this.position;
+            MyQuaternion worldRotation = this.Rotation;
+            Vec3 worldScale = this.lossyScale;
+
+            this.parent = newParent;
+
+            if (newParent != null)
+            {
+                newParent.AddChildren(this);
+                
+                localPosition = new Vec3(MyQuaternion.Inverse(newParent.Rotation) * (worldPosition - newParent.position));
+            }
+
+            hasChanged = true;
+            UpdateMatrix();
         }
 
         public void SetParent(MyTransform parent, bool worldPositionStays)
         {
-            throw new NotImplementedException();
+            if (worldPositionStays)
+            {
+                Vec3 worldPosition = LocalToWorldMatrix.GetPosition();
+                MyQuaternion worldRotation = Rotation;
+
+                SetParent(parent);
+
+                if (parent != null)
+                {
+                    position = parent.InverseTransformPoint(worldPosition);
+                }
+                else
+                {
+                    position = worldPosition;
+                }
+
+                Rotation = worldRotation;
+            }
+            else
+            {
+                SetParent(parent);
+            }
         }
 
         public void AddChildren(MyTransform children)

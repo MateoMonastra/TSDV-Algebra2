@@ -1,4 +1,5 @@
 using System;
+using TP1_TP2.Utilities;
 using UnityEngine;
 
 public class MyMatrix4x4 : IEquatable<MyMatrix4x4>, IFormattable
@@ -495,9 +496,9 @@ public class MyMatrix4x4 : IEquatable<MyMatrix4x4>, IFormattable
         }
     }
 
-    public Vector3 GetPosition()
+    public Vec3 GetPosition()
     {
-        return new Vector3(M03, M13, M23);
+        return new Vec3(M03, M13, M23);
     }
 
     public Vector4 GetRow(int index)
