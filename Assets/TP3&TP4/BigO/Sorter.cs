@@ -50,7 +50,6 @@ namespace TP3
             Debug.Log("BubbleSort - Lista ordenada: " + string.Join(", ", list));
         }
 
-
         // Algoritmo Selection Sort:
         //Memory: O(n^2)
         // Selecciona el elemento más pequeño y lo coloca al inicio de la lista, repitiendo este proceso para
@@ -156,6 +155,7 @@ namespace TP3
             {
                 T key = list[i];
                 int j = i - 1;
+                
                 while (j >= left && list[j].CompareTo(key) > 0)
                 {
                     list[j + 1] = list[j];
@@ -240,8 +240,7 @@ namespace TP3
 
             return result;
         }
-
-
+        
         // Algoritmo Heap Sort:
         //Memory: O(n log n)
         public static void HeapSort<T>(List<T> list, int left, int right) where T : IComparable<T>
@@ -281,7 +280,6 @@ namespace TP3
                 Heapify(list, size, largest, offset);
             }
         }
-
 
         // Algoritmo Bitonic Sort
         // Funciona solo para tamaños que sean potencias de 2.
@@ -347,7 +345,6 @@ namespace TP3
             QuickSortRecursive(list, left, pivotIndex - 1);
             QuickSortRecursive(list, pivotIndex + 1, right);
         }
-
 
         // Algoritmo Intro Sort:
         // Comienza usando QuickSort y cambia a HeapSort si la profundidad de recursión excede el límite permitido,
@@ -446,8 +443,7 @@ namespace TP3
                 list[from + i] = temp[i];
             }
         }
-
-
+        
         public static void RadixLSDSort(List<T> list)
         {
             Debug.Log("RadixLSDSort - Lista inicial: " + string.Join(", ", list));
@@ -498,8 +494,7 @@ namespace TP3
                 Debug.Log("RadixLSDSort - Lista ordenada: " + string.Join(", ", list));
             }
         }
-
-
+        
         public static void RadixMSDSort(List<T> list)
         {
             Debug.Log("RadixMSDSort - Lista inicial: " + string.Join(", ", list));

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class GraphMethods
 {
@@ -156,7 +157,7 @@ public class GraphMethods
             currentIndex++;
         }
 
-        return default(TSource);
+        return default;
     }
 
     /// <summary>
@@ -245,7 +246,7 @@ public class GraphMethods
 
             index++;
         }
-
+        
         if (lastFoundIndex != -1)
         {
             return ElementAt(source, lastFoundIndex);
