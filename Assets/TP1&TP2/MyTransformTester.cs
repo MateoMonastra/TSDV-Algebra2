@@ -21,6 +21,8 @@ namespace TP1_TP2
         [SerializeField] private float rotationZ;
         [SerializeField] private float scale;
         
+        [SerializeField] private bool lookAtPoint;
+        
 
         private MyTransform _myCube = new MyTransform();
         private MyTransform _myCube2 = new MyTransform();
@@ -51,6 +53,12 @@ namespace TP1_TP2
             
             _myCube.SetLocalScale(new Vec3(scale,scale,scale));
             unityHierarchyCube.localScale = new Vector3(scale,scale,scale);
+
+            if (lookAtPoint)
+            {
+                _myCube.LookAt(point,Vec3.Up);
+                unityHierarchyCube.LookAt(point, Vec3.Up);
+            }
             
             testCube.SetLocalPositionAndRotation(_myCube.localPosition,_myCube.LocalRotation.ToQuaternion());
             testCube.SetPositionAndRotation(_myCube.position,_myCube.Rotation.ToQuaternion());
