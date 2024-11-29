@@ -54,13 +54,13 @@ namespace TP1_TP2
             
             testCube.SetLocalPositionAndRotation(_myCube.localPosition,_myCube.LocalRotation.ToQuaternion());
             testCube.SetPositionAndRotation(_myCube.position,_myCube.Rotation.ToQuaternion());
-            testCube.localScale = _myCube.localScale;
+            testCube.localScale = _myCube.lossyScale;
             
             testCube2.SetPositionAndRotation(_myCube2.position,_myCube2.Rotation.ToQuaternion());
-            testCube2.localScale = _myCube2.localScale;
+            testCube2.localScale = _myCube2.lossyScale;
             
             testCube3.SetPositionAndRotation(_myCube3.position,_myCube3.Rotation.ToQuaternion());
-            testCube3.localScale = _myCube3.localScale;
+            testCube3.localScale = _myCube3.lossyScale;
             
         }
 

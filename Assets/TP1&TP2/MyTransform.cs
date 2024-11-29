@@ -449,16 +449,21 @@ namespace TP1_TP2
         {
             if (parent != null)
             {
-                position = new Vec3(parent.Rotation * localPosition + parent.position);
+                position = new Vec3(parent.Rotation * Vec3.Scale(localPosition, parent.lossyScale) + parent.position);
+                
                 Rotation = parent.Rotation * LocalRotation;
+                
+                lossyScale = Vec3.Scale(parent.lossyScale, localScale);
             }
             else
             {
+                lossyScale = localScale;
+                
                 WorldToLocalMatrix = LocalToWorldMatrix.inverse;
             }
-
+            
             eulerAngles = Rotation.EulerAngles;
-
+            
             UpdateChildrens();
         }
 
