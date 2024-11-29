@@ -221,7 +221,7 @@ Transform:
   m_GameObject: {fileID: 295573586}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.08609, y: 23.897215, z: 2.492943}
+  m_LocalPosition: {x: -30.28, y: 23.897215, z: 4.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -345,7 +345,7 @@ GameObject:
   m_Layer: 0
   m_Name: Tester
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -370,6 +370,8 @@ MonoBehaviour:
   rotationY: 0
   rotationZ: 0
   scale: 1
+  lookAtPoint: 0
+  rotateAround: 0
 --- !u!4 &380809785
 Transform:
   m_ObjectHideFlags: 0
@@ -379,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 380809783}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.66551, y: 23.715237, z: -5.906096}
+  m_LocalPosition: {x: -22.45, y: 23.715237, z: 5.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

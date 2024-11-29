@@ -48,8 +48,15 @@ namespace TP1_TP2
 
         public void DetachChildren(MyTransform children)
         {
-            childrens.Remove(children);
-            _childCount--;
+            if (childrens.Contains(children))
+            {
+                childrens.Remove(children);
+                _childCount--;
+            }
+            else
+            {
+                Debug.LogWarning("Children not found");
+            }
         }
 
         public int GetChildCount()
@@ -75,6 +82,7 @@ namespace TP1_TP2
             {
                 newParent.AddChildren(this);
 
+                //convierte a local la global en base al padre
                 localPosition =
                     new Vec3(MyQuaternion.Inverse(newParent.Rotation) * (worldPosition - newParent.position));
             }
@@ -117,22 +125,7 @@ namespace TP1_TP2
 
         public void LookAt(Vec3 targetPosition)
         {
-            Vec3 direction = (targetPosition - position).normalized;
-
-            MyQuaternion newRotation = MyQuaternion.LookRotation(direction, Vec3.Up);
-
-            Rotation = newRotation;
-
-            if (parent != null)
-            {
-                LocalRotation = MyQuaternion.Inverse(parent.Rotation) * Rotation;
-            }
-            else
-            {
-                LocalRotation = Rotation;
-            }
-
-            UpdateMatrix();
+            LookAt(targetPosition, Vec3.Up);
         }
 
         public void LookAt(Vec3 targetPosition, Vec3 worldUp)
@@ -196,7 +189,7 @@ namespace TP1_TP2
             }
             else
             {
-                Rotation = Rotation * (MyQuaternion.Inverse(Rotation) * eulerRot * Rotation);
+                Rotation = MyQuaternion.Inverse(Rotation) * eulerRot * Rotation;
 
                 if (parent != null)
                 {
