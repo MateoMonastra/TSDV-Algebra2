@@ -279,52 +279,102 @@ namespace TP1_TP2
 
         public void SetLocalPositionAndRotation(Vec3 localPosition, MyQuaternion rotation)
         {
-            throw new NotImplementedException();
+            this.localPosition = localPosition;
+            this.LocalRotation = rotation;
+
+            if (parent != null)
+            {
+                position = parent.position + parent.Rotation * localPosition;
+                this.Rotation = parent.Rotation * LocalRotation;
+            }
+            else
+            {
+                position = localPosition;
+                this.Rotation = LocalRotation;
+            }
+
+            hasChanged = true;
         }
 
         public void SetPositionAndRotation(Vec3 position, MyQuaternion rotation)
         {
-            throw new NotImplementedException();
+            this.position = position;
+            this.Rotation = rotation;
+
+            if (parent != null)
+            {
+                localPosition = MyQuaternion.Inverse(parent.Rotation) * (position - parent.position);
+                LocalRotation = MyQuaternion.Inverse(parent.Rotation) * rotation;
+            }
+            else
+            {
+                localPosition = position;
+                LocalRotation = rotation;
+            }
+
+            hasChanged = true;
         }
 
         public void Translate(Vec3 translation, Space relativeTo)
         {
-            throw new NotImplementedException();
+            if (relativeTo == Space.World)
+            {
+                position += translation;
+            }
+            else
+            {
+                position += Rotation * translation;
+            }
+
+            hasChanged = true;
         }
 
         public void Translate(Vec3 translation)
         {
-            throw new NotImplementedException();
+            Translate(translation, Space.Self);
         }
 
         public void Translate(float x, float y, float z, Space relativeTo)
         {
-            throw new NotImplementedException();
+            Translate(new Vec3(x, y, z), relativeTo);
         }
 
         public void Translate(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            Translate(new Vec3(x, y, z));
         }
 
         public void Translate(Vec3 translation, MyTransform relativeTo)
         {
-            throw new NotImplementedException();
+            if (relativeTo != null)
+            {
+                position += relativeTo.TransformDirection(translation);
+            }
+            else
+            {
+                position += translation;
+            }
+
+            hasChanged = true;
         }
 
         public void Translate(float x, float y, float z, MyTransform relativeTo)
         {
-            throw new NotImplementedException();
+            Translate(new Vec3(x, y, z), relativeTo);
         }
 
         public void Scale(Vec3 scale)
         {
-            throw new NotImplementedException();
+            localScale = Vec3.Scale(localScale, scale);
+
+            UpdateMatrix();
         }
 
         public void SetLocalScale(Vec3 newScale)
         {
-            throw new NotImplementedException();
+            localScale = newScale;
+
+            UpdateMatrix();
         }
 
         public Vec3 TransformDirection(Vec3 direction)

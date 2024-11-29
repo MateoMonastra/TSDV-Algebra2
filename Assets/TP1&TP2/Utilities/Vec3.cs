@@ -317,6 +317,11 @@ namespace TP1_TP2.Utilities
             this.y *= scale.y;
             this.z *= scale.z;
         }
+        
+        public static Vec3 Scale(Vec3 a, Vec3 b)
+        {
+            return new Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
 
         #endregion
 
