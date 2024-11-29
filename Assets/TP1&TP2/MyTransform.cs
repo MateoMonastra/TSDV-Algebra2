@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace TP1_TP2
 {
-    public class MyTransform : MonoBehaviour
+    public class MyTransform
     {
         public Vec3 position;
         public Vec3 localPosition;
@@ -13,9 +13,6 @@ namespace TP1_TP2
         public MyQuaternion LocalRotation;
         public Vec3 eulerAngles;
         public Vec3 localEulerAngles;
-        public Vec3 right;
-        public Vec3 up;
-        public Vec3 forward;
 
         public MyMatrix4x4 WorldToLocalMatrix;
         public MyMatrix4x4 LocalToWorldMatrix;
@@ -23,10 +20,10 @@ namespace TP1_TP2
 
         public Vec3 lossyScale;
         public Vec3 localScale;
-        public bool hasChanged;
         public MyTransform parent;
         public List<MyTransform> childrens;
-        public int childCount;
+        
+        private int _childCount;
 
 
         public MyTransform()
@@ -45,21 +42,19 @@ namespace TP1_TP2
                 child.SetParent(null);
             }
 
-            childCount = 0;
+            _childCount = 0;
             childrens.Clear();
-
-            hasChanged = true;
         }
 
         public void DetachChildren(MyTransform children)
         {
             childrens.Remove(children);
-            childCount--;
+            _childCount--;
         }
 
         public int GetChildCount()
         {
-            return childCount;
+            return _childCount;
         }
 
         public void SetParent(MyTransform newParent)
@@ -83,8 +78,7 @@ namespace TP1_TP2
                 localPosition =
                     new Vec3(MyQuaternion.Inverse(newParent.Rotation) * (worldPosition - newParent.position));
             }
-
-            hasChanged = true;
+            
             UpdateMatrix();
         }
 
@@ -118,7 +112,7 @@ namespace TP1_TP2
         {
             childrens.Add(children);
             children.parent = this;
-            childCount++;
+            _childCount++;
         }
 
         public void LookAt(Vec3 targetPosition)
@@ -137,8 +131,6 @@ namespace TP1_TP2
             {
                 LocalRotation = Rotation;
             }
-
-            hasChanged = true;
 
             UpdateMatrix();
         }
@@ -161,8 +153,6 @@ namespace TP1_TP2
             {
                 LocalRotation = Rotation;
             }
-
-            hasChanged = true;
 
             UpdateMatrix();
         }
@@ -292,8 +282,6 @@ namespace TP1_TP2
                 position = localPosition;
                 this.Rotation = LocalRotation;
             }
-
-            hasChanged = true;
         }
 
         public void SetPositionAndRotation(Vec3 position, MyQuaternion rotation)
@@ -312,7 +300,6 @@ namespace TP1_TP2
                 LocalRotation = rotation;
             }
 
-            hasChanged = true;
         }
 
         public void Translate(Vec3 translation, Space relativeTo)
@@ -325,8 +312,7 @@ namespace TP1_TP2
             {
                 position += Rotation * translation;
             }
-
-            hasChanged = true;
+            
         }
 
         public void Translate(Vec3 translation)
@@ -354,8 +340,7 @@ namespace TP1_TP2
             {
                 position += translation;
             }
-
-            hasChanged = true;
+            
         }
 
         public void Translate(float x, float y, float z, MyTransform relativeTo)
@@ -457,8 +442,7 @@ namespace TP1_TP2
             LocalToWorldMatrix = MyMatrix4x4.TRS(localPosition, LocalRotation, localScale);
 
             localEulerAngles = LocalRotation.EulerAngles;
-
-            hasChanged = true;
+            
         }
 
         private void UpdateWorldToLocalMatrix()
@@ -474,8 +458,6 @@ namespace TP1_TP2
             }
 
             eulerAngles = Rotation.EulerAngles;
-
-            hasChanged = true;
 
             UpdateChildrens();
         }

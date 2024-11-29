@@ -60,6 +60,19 @@ public class MyQuaternion : IEquatable<MyQuaternion>, IFormattable
         this.z = z;
         this.w = w;
     }
+    
+    public MyQuaternion(Quaternion quaternion)
+    {
+        this.x = quaternion.x;
+        this.y = quaternion.y;
+        this.z = quaternion.z;
+        this.w = quaternion.w;
+    }
+
+    public Quaternion ToQuaternion()
+    {
+        return new Quaternion(this.x, this.y, this.z, this.w);
+    }
 
      // Returns or sets the euler angle representation of the rotation.
         public Vec3 EulerAngles
