@@ -379,67 +379,86 @@ namespace TP1_TP2
 
         public Vec3 TransformDirection(Vec3 direction)
         {
-            throw new NotImplementedException();
+             return Rotation * direction;
         }
 
         public Vec3 TransformDirection(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return TransformDirection(new Vec3(x, y, z));
         }
 
         public Vec3 TransformPoint(Vec3 position)
         {
-            throw new NotImplementedException();
+            Vec3 transformedPoint = Rotation * Vec3.Scale(localPosition, localScale);
+
+            transformedPoint += position;
+
+            return transformedPoint;
         }
 
         public Vec3 TransformPoint(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return TransformPoint(new(x, y, z));
         }
 
         public Vec3 TransformVector(Vec3 vector)
         {
-            throw new NotImplementedException();
+            Vec3 transformedVector = Rotation * vector;
+
+            transformedVector = Vec3.Scale(transformedVector, localScale);
+
+            return transformedVector;
         }
 
         public Vec3 TransformVector(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return TransformVector(new Vec3(x, y, z));
         }
 
         public Vec3 InverseTransformDirection(Vec3 direction)
         {
-            throw new NotImplementedException();
+            return MyQuaternion.Inverse(Rotation) * direction;
         }
 
         public Vec3 InverseTransformDirection(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return InverseTransformDirection(new Vec3(x, y, z));
         }
 
         public Vec3 InverseTransformPoint(Vec3 position)
         {
-            throw new NotImplementedException();
+            Vec3 transformedPoint = position - localPosition;
+            transformedPoint = MyQuaternion.Inverse(Rotation) * transformedPoint;
+            transformedPoint = Vec3.Scale(transformedPoint, Vec3.Inverse(localScale));
+
+            return transformedPoint;
         }
 
         public Vec3 InverseTransformPoint(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return InverseTransformPoint(x, y, z);
         }
 
         public Vec3 InverseTransformVector(Vec3 vector)
         {
-            throw new NotImplementedException();
+            Vec3 transformedVector = MyQuaternion.Inverse(Rotation) * vector;
+            transformedVector = Vec3.Scale(transformedVector, Vec3.Inverse(localScale));
+
+            return transformedVector;
         }
 
         public Vec3 InverseTransformVector(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            return InverseTransformVector(x, y, z);
         }
 
         private void UpdateLocalToWorldMatrix()
         {
-            throw new NotImplementedException();
+            LocalToWorldMatrix = MyMatrix4x4.TRS(localPosition, LocalRotation, localScale);
+
+            localEulerAngles = LocalRotation.EulerAngles;
+
+            hasChanged = true;
         }
 
         private void UpdateWorldToLocalMatrix()

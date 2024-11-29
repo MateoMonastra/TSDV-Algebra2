@@ -310,6 +310,15 @@ namespace TP1_TP2.Utilities
             this.y = newY;
             this.z = newZ;
         }
+        
+        public static Vec3 Inverse(Vec3 vec)
+        {
+            return new Vec3(
+                vec.x != 0 ? 1 / vec.x : 0,
+                vec.y != 0 ? 1 / vec.y : 0,
+                vec.z != 0 ? 1 / vec.z : 0
+            );
+        }
 
         public void Scale(Vec3 scale)
         {
